@@ -3,12 +3,12 @@
 
 @mytag
 Scenario: Call MonkeyTalk Wire with a Simple Play Command
-	Given I have a running MonkeyTalk Agent at location "mock"
+	Given I have a running MonkeyTalk Remote at location "mock"
 	When I send a simple play command payload
 	Then the result should be "OK"
 
 Scenario Outline: Call MonkeyTalk Wire with a Play Command
-	Given I have a running MonkeyTalk Agent at location "<location>"
+	Given I have a running MonkeyTalk Remote at location "<location>"
 	And I want to send a "Play" command
 	And the componentType is "<componentType>"
 	And the monkeyId is "<monkeyId>"
@@ -22,5 +22,12 @@ Scenario Outline: Call MonkeyTalk Wire with a Play Command
 	| http://localhost:22283/api/mockmonkeytalkagent | Button        | *        |      | Tap    | OK     |
 	
 
+Scenario Outline: Call MonkeyTalk Fluently with a Play Command
+	Given I have a running MonkeyTalk Remote at location "<location>"
+	When I send a Play command to "<action>" "<componentType>" "<monkeyId>" with "<args>"
+	Then the result should be "<result>" 
 
-
+	Examples: 
+	| location                                       | componentType | monkeyId | args | action | result |
+	| mock                                           | Button        | *        |      | Tap    | OK     |
+	| http://localhost:22283/api/mockmonkeytalkagent | Button        | *        |      | Tap    | OK     |

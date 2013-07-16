@@ -22,9 +22,9 @@ namespace Chimp.WebAPI.Controllers
         }
 
         // POST api/mockmonkeytalkagent
-        public void Post([FromBody]string value)
+        public string Post([FromBody]string value)
         {
-            
+            return System.Web.Helpers.Json.Encode( new Chimp.Core.MonkeyTalkWireReturn() { message = "Love it", result = "OK" }  );
         }
 
         // PUT api/mockmonkeytalkagent/5

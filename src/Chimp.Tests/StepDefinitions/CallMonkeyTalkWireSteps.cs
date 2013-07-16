@@ -12,23 +12,23 @@ namespace Chimp.Tests.StepDefinitions
     public class CallMonkeyTalkWireSteps
     {
 
-        IMonkeyTalkAgent _monkeyTalkAgent;
+        IMonkeyTalkRemote _monkeyTalkRemote;
         MonkeyTalkWireReturn _monkeyTalkReturnMessage;
-        Moq.Mock<IMonkeyTalkAgent> _mock;
+        Moq.Mock<IMonkeyTalkRemote> _mock;
         MonkeyTalkWirePayload _payload;
         bool _useMock;
+ 
 
-        [Given(@"I have a running MonkeyTalk Agent at location ""(.*)""")]
-        public void GivenIHaveARunningMonkeyTalkAgentAtLocation(string location)
+        [Given(@"I have a running MonkeyTalk Remote at location ""(.*)""")]
+        public void GivenIHaveARunningMonkeyTalkRemoteAtLocation(string location)
         {
             if (location == "mock")
             {
-                //use a mock agent
-                _mock = new Moq.Mock<IMonkeyTalkAgent>();
+                _mock = new Moq.Mock<IMonkeyTalkRemote>();
             }
             else
             {
-                _monkeyTalkAgent = new ChimpAgent(location, string.Empty); //string.Empty should be deviceIp from Devs config file.
+                _monkeyTalkRemote = new ChimpRemote(location, string.Empty); //string.Empty should be deviceIp from Devs config file.
             }
             if (_payload == null) _payload = new MonkeyTalkWirePayload();
         }
@@ -39,8 +39,8 @@ namespace Chimp.Tests.StepDefinitions
             //default payload - Tap and call Play
             _payload = new MonkeyTalkWirePayload() { action = MonkeyTalkAction.Tap, mtcommand = MonkeyTalkCommand.PLAY };
             _mock.Setup(x => x.Play(_payload)).Returns(new MonkeyTalkWireReturn() { result = "OK", message = "mocked test result" });
-            _monkeyTalkAgent = _mock.Object;
-            _monkeyTalkReturnMessage = _monkeyTalkAgent.Play(_payload);
+            _monkeyTalkRemote = _mock.Object;
+            _monkeyTalkReturnMessage = _monkeyTalkRemote.Play(_payload);
         }
 
         [Given(@"I want to send a ""(.*)"" command")]
@@ -80,8 +80,6 @@ namespace Chimp.Tests.StepDefinitions
         {
             MonkeyTalkAction action = MonkeyTalkAction.Tap;
             Enum.TryParse<MonkeyTalkAction>(p0, out action);
-            if (action == null) 
-                throw new ArgumentNullException(p0);
             _payload.action = action;
 
             if (_mock != null)
@@ -89,10 +87,21 @@ namespace Chimp.Tests.StepDefinitions
                 _mock.Setup(x => x.Play(_payload))
                     .Returns(new MonkeyTalkWireReturn() { result = "OK" });
 
-                _monkeyTalkAgent = _mock.Object;
+                _monkeyTalkRemote = _mock.Object;
             }
 
-            _monkeyTalkReturnMessage = _monkeyTalkAgent.Play(_payload);
+            _monkeyTalkReturnMessage = _monkeyTalkRemote.Play(_payload);
+
+            //app.Button("butonId").Tap().With("ssasasas");
+        }
+
+        
+
+        //When I send a Play command to "<action>" "<componentType>" "<monkeyId>" with "<args>"
+        [When(@"I send a Play command to ""(.*)"" ""(.*)"" ""(.*)"" with ""(.*)""")]
+        public void WhenISendAPlayCommandToWith(string action, string componentType, string monkeyId, string args)
+        {
+            _monkeyTalkReturnMessage = _monkeyTalkRemote.For(componentType, monkeyId).With(args).Play(action);
         }
 
 

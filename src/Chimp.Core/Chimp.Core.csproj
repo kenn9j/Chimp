@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChimpAgent.cs" />
+    <Compile Include="ChimpRemote.cs" />
     <Compile Include="Driver.cs" />
-    <Compile Include="IMonkeyTalkAgent.cs" />
+    <Compile Include="IMonkeyTalkRemote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -74,7 +74,7 @@ namespace Chimp.Tests
 #line 5
 this.ScenarioSetup(scenarioInfo);
 #line 6
- testRunner.Given("I have a running MonkeyTalk Agent at location \"mock\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I have a running MonkeyTalk Remote at location \"mock\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
  testRunner.When("I send a simple play command payload", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
@@ -93,7 +93,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 10
 this.ScenarioSetup(scenarioInfo);
 #line 11
- testRunner.Given(string.Format("I have a running MonkeyTalk Agent at location \"{0}\"", location), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have a running MonkeyTalk Remote at location \"{0}\"", location), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 12
  testRunner.And("I want to send a \"Play\" command", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
@@ -105,6 +105,25 @@ this.ScenarioSetup(scenarioInfo);
 #line 16
  testRunner.When(string.Format("I send a \"{0}\" action with the payload", action), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 17
+ testRunner.Then(string.Format("the result should be \"{0}\"", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Call MonkeyTalk Fluently with a Play Command")]
+        [NUnit.Framework.TestCaseAttribute("mock", "Button", "*", "", "Tap", "OK", null)]
+        [NUnit.Framework.TestCaseAttribute("http://localhost:22283/api/mockmonkeytalkagent", "Button", "*", "", "Tap", "OK", null)]
+        public virtual void CallMonkeyTalkFluentlyWithAPlayCommand(string location, string componentType, string monkeyId, string args, string action, string result, string[] exampleTags)
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Call MonkeyTalk Fluently with a Play Command", exampleTags);
+#line 25
+this.ScenarioSetup(scenarioInfo);
+#line 26
+ testRunner.Given(string.Format("I have a running MonkeyTalk Remote at location \"{0}\"", location), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 27
+ testRunner.When(string.Format("I send a Play command to \"{0}\" \"{1}\" \"{2}\" with \"{3}\"", action, componentType, monkeyId, args), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 28
  testRunner.Then(string.Format("the result should be \"{0}\"", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
