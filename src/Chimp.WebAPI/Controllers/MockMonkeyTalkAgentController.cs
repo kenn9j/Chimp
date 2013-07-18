@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Chimp.Core;
 
 namespace Chimp.WebAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace Chimp.WebAPI.Controllers
         // POST api/mockmonkeytalkagent
         public string Post([FromBody]string value)
         {
-            return System.Web.Helpers.Json.Encode( new Chimp.Core.MonkeyTalkWireReturn() { message = "Love it", result = "OK" }  );
+            return System.Web.Helpers.Json.Encode( new ChimpReturnMessage() { message = "Love it", result = "OK" }  );
         }
 
         // PUT api/mockmonkeytalkagent/5

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Chimp.Core
 {
-    public class ChimpRemote : IMonkeyTalkRemote
+    public class ChimpRemote : IChimpRemote
     {
         private string _url;
         private string _deviceIp;
@@ -21,35 +21,35 @@ namespace Chimp.Core
             this._deviceIp = deviceIp;
         }
 
-        public MonkeyTalkWireReturn Play(MonkeyTalkWirePayload payload)
+        public ChimpReturnMessage Play(MonkeyTalkWirePayload payload)
         {
 
             string res = Post(_url, _deviceIp, JObject.FromObject(payload).ToString());
-            var j = JsonConvert.DeserializeObject<MonkeyTalkWireReturn>(res);
+            var j = JsonConvert.DeserializeObject<ChimpReturnMessage>(res);
             return j;
         }
 
-        public MonkeyTalkWireReturn Record(MonkeyTalkWirePayload payload)
+        public ChimpReturnMessage Record(MonkeyTalkWirePayload payload)
         {
             throw new NotImplementedException();
         }
 
-        public MonkeyTalkWireReturn Ping(MonkeyTalkWirePayload payload)
+        public ChimpReturnMessage Ping(MonkeyTalkWirePayload payload)
         {
             throw new NotImplementedException();
         }
 
-        public MonkeyTalkWireReturn Play(string action)
+        public ChimpReturnMessage Play(string action)
         {
             _payload = new MonkeyTalkWirePayload { mtcommand = MonkeyTalkCommand.PLAY, mtversion = "1" };
-            MonkeyTalkAction a = MonkeyTalkAction.Tap;
-            Enum.TryParse<MonkeyTalkAction>(action, out a);
+            ChimpAction a = ChimpAction.Tap;
+            Enum.TryParse<ChimpAction>(action, out a);
             _payload.action = a;
             _payload.mtcommand = MonkeyTalkCommand.PLAY;
             return Play(_payload);
         }
 
-        public MonkeyTalkWireReturn Play(MonkeyTalkAction action)
+        public ChimpReturnMessage Play(ChimpAction action)
         {
             _payload = new MonkeyTalkWirePayload { mtcommand = MonkeyTalkCommand.PLAY, mtversion = "1" };
             _payload.action = action;
@@ -57,7 +57,7 @@ namespace Chimp.Core
             return Play(_payload);
         }
 
-        public IMonkeyTalkRemote For(string componentType, string monkeyId)
+        public IChimpRemote Element(string componentType, string monkeyId)
         {
             _payload = new MonkeyTalkWirePayload { mtversion = "1" };
             _payload.componentType = (MonkeyTalkComponent)Enum.Parse(typeof(MonkeyTalkComponent), componentType);
@@ -65,18 +65,18 @@ namespace Chimp.Core
             return this;
         }
 
-        public IMonkeyTalkRemote For(MonkeyTalkComponent componentType, string monkeyId)
+        public IChimpRemote Element(MonkeyTalkComponent componentType, string monkeyId)
         {
             throw new NotImplementedException();
         }
 
-        public IMonkeyTalkRemote With(string args)
+        public IChimpRemote With(string args)
         {
             _payload.args = args.Split(',');
             return this;
         }
 
-        public IMonkeyTalkRemote With(string args, string modifiers)
+        public IChimpRemote With(string args, string modifiers)
         {
             _payload.args = args.Split(',');
             //todo: _payload.modifiers = modifiers.ToDictionary
@@ -124,6 +124,68 @@ namespace Chimp.Core
                 // You might want to handle some specific errors : Just pass on up for now...
                 throw ex;
             }
+        }
+
+        public IChimpAction Button(string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IChimpArgs Slider(string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IChimpArgs TextField(string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IChimpArgs Checkbox(string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IChimpElement Tap()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ChimpReturnMessage TouchUp()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ChimpReturnMessage TouchDown()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ChimpReturnMessage SwipeLeft()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ChimpReturnMessage SwipeRight()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        IChimpArgs IChimpRemote.Element(string componentType, string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        IChimpArgs IChimpRemote.Element(MonkeyTalkComponent componentType, string monkeyId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        ChimpReturnMessage IChimpAction.Tap()
+        {
+            throw new NotImplementedException();
         }
     }
 }

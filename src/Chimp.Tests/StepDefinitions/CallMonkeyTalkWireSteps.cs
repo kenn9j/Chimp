@@ -5,6 +5,7 @@ using Chimp.Core;
 using Newtonsoft;
 using NUnit.Framework;
 using Autofac;
+using a = Chimp.Core.ChimpAction; 
 
 namespace Chimp.Tests.StepDefinitions
 {
@@ -12,9 +13,9 @@ namespace Chimp.Tests.StepDefinitions
     public class CallMonkeyTalkWireSteps
     {
 
-        IMonkeyTalkRemote _monkeyTalkRemote;
-        MonkeyTalkWireReturn _monkeyTalkReturnMessage;
-        Moq.Mock<IMonkeyTalkRemote> _mock;
+        IChimpRemote chimpRemoteDevice;
+        ChimpReturnMessage chimpReturnMessage;
+        Moq.Mock<IChimpRemote> _mock;
         MonkeyTalkWirePayload _payload;
         bool _useMock;
  
@@ -24,11 +25,11 @@ namespace Chimp.Tests.StepDefinitions
         {
             if (location == "mock")
             {
-                _mock = new Moq.Mock<IMonkeyTalkRemote>();
+                _mock = new Moq.Mock<IChimpRemote>();
             }
             else
             {
-                _monkeyTalkRemote = new ChimpRemote(location, string.Empty); //string.Empty should be deviceIp from Devs config file.
+                chimpRemoteDevice = new ChimpRemote(location, string.Empty); //string.Empty should be deviceIp from Devs config file.
             }
             if (_payload == null) _payload = new MonkeyTalkWirePayload();
         }
@@ -37,10 +38,10 @@ namespace Chimp.Tests.StepDefinitions
         public void WhenISendASimplePlayCommandPayload()
         {
             //default payload - Tap and call Play
-            _payload = new MonkeyTalkWirePayload() { action = MonkeyTalkAction.Tap, mtcommand = MonkeyTalkCommand.PLAY };
-            _mock.Setup(x => x.Play(_payload)).Returns(new MonkeyTalkWireReturn() { result = "OK", message = "mocked test result" });
-            _monkeyTalkRemote = _mock.Object;
-            _monkeyTalkReturnMessage = _monkeyTalkRemote.Play(_payload);
+            _payload = new MonkeyTalkWirePayload() { action = ChimpAction.Tap, mtcommand = MonkeyTalkCommand.PLAY };
+            _mock.Setup(x => x.Play(_payload)).Returns(new ChimpReturnMessage() { result = "OK", message = "mocked test result" });
+            chimpRemoteDevice = _mock.Object;
+            chimpReturnMessage = chimpRemoteDevice.Play(_payload);
         }
 
         [Given(@"I want to send a ""(.*)"" command")]
@@ -53,7 +54,7 @@ namespace Chimp.Tests.StepDefinitions
         [Then(@"the result should be ""(.*)""")]
         public void ThenTheResultShouldBe(string p0)
         {
-            Assert.IsTrue(_monkeyTalkReturnMessage.result == p0);
+            Assert.IsTrue(chimpReturnMessage.result == p0);
         }
 
         [Given(@"the componentType is ""(.*)""")]
@@ -78,19 +79,19 @@ namespace Chimp.Tests.StepDefinitions
         [When(@"I send a ""(.*)"" action with the payload")]
         public void WhenISendAActionWithThePayload(string p0)
         {
-            MonkeyTalkAction action = MonkeyTalkAction.Tap;
-            Enum.TryParse<MonkeyTalkAction>(p0, out action);
+            ChimpAction action = ChimpAction.Tap;
+            Enum.TryParse<ChimpAction>(p0, out action);
             _payload.action = action;
 
             if (_mock != null)
             {
                 _mock.Setup(x => x.Play(_payload))
-                    .Returns(new MonkeyTalkWireReturn() { result = "OK" });
+                    .Returns(new ChimpReturnMessage() { result = "OK" });
 
-                _monkeyTalkRemote = _mock.Object;
+                chimpRemoteDevice = _mock.Object;
             }
 
-            _monkeyTalkReturnMessage = _monkeyTalkRemote.Play(_payload);
+            chimpReturnMessage = chimpRemoteDevice.Play(_payload);
 
             //app.Button("butonId").Tap().With("ssasasas");
         }
@@ -101,7 +102,12 @@ namespace Chimp.Tests.StepDefinitions
         [When(@"I send a Play command to ""(.*)"" ""(.*)"" ""(.*)"" with ""(.*)""")]
         public void WhenISendAPlayCommandToWith(string action, string componentType, string monkeyId, string args)
         {
-            _monkeyTalkReturnMessage = _monkeyTalkRemote.For(componentType, monkeyId).With(args).Play(action);
+            
+            chimpReturnMessage = chimpRemoteDevice.Element(componentType, monkeyId).With(args).Play(action);
+            chimpReturnMessage = chimpRemoteDevice.Element(MonkeyTalkComponent.Button, "button1").With(args).Play(a.Tap);
+            chimpRemoteDevice.Button("id").Tap();
+            chimpRemoteDevice.Slider("id").With("args").SwipeRight();
+
         }
 
 

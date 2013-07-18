@@ -6,103 +6,48 @@ using Newtonsoft.Json;
 
 namespace Chimp.Core
 {
-    public interface IMonkeyTalkRemote
+    public interface IChimpRemote : IChimpElement, IChimpAction
     {
-        MonkeyTalkWireReturn Play(MonkeyTalkWirePayload payload);
-        MonkeyTalkWireReturn Record(MonkeyTalkWirePayload payload);
-        MonkeyTalkWireReturn Ping(MonkeyTalkWirePayload payload);
+        ChimpReturnMessage Play(MonkeyTalkWirePayload payload);
+        ChimpReturnMessage Record(MonkeyTalkWirePayload payload);
+        ChimpReturnMessage Ping(MonkeyTalkWirePayload payload);
 
-        MonkeyTalkWireReturn Play(string action);
-        MonkeyTalkWireReturn Play(MonkeyTalkAction action);
-        IMonkeyTalkRemote For(string componentType, string monkeyId);
-        IMonkeyTalkRemote For(MonkeyTalkComponent componentType, string monkeyId);
-        IMonkeyTalkRemote With(string args);
+
+        IChimpArgs Element(string componentType, string monkeyId);
+        IChimpArgs Element(MonkeyTalkComponent componentType, string monkeyId);
+
+        //IChimpRemote With(string args);
+        //IChimpRemote With(string args, Dictionary<string, string> modifiers);
 
     }
 
-    public class MockMonkeyTalkAgent : IMonkeyTalkRemote
+    public interface IChimpElement
     {
-        public MonkeyTalkWireReturn Play(MonkeyTalkWirePayload payload)
-        {
-            throw new NotImplementedException();
-        }
+        IChimpRemote Element(string componentType, string monkeyId);
+        IChimpRemote Element(MonkeyTalkComponent componentType, string monkeyId);
 
-        public MonkeyTalkWireReturn Record(MonkeyTalkWirePayload payload)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MonkeyTalkWireReturn Ping(MonkeyTalkWirePayload payload)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IMonkeyTalkRemote Play(string action)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMonkeyTalkRemote For(string componentType, string monkeyId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMonkeyTalkRemote With(string args)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public MonkeyTalkWireReturn Play()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IMonkeyTalkRemote Play(MonkeyTalkAction action)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMonkeyTalkRemote For(MonkeyTalkComponent componentType, string monkeyId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        MonkeyTalkWireReturn IMonkeyTalkRemote.Play(string action)
-        {
-            throw new NotImplementedException();
-        }
-
-        MonkeyTalkWireReturn IMonkeyTalkRemote.Play(MonkeyTalkAction action)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public interface IMonkeyTalkComponentList
-    {
-         IMonkeyTalkComponentAction Button(string monkeyId);
-         IMonkeyTalkComponentAction Slider(string monkeyId);
-         IMonkeyTalkComponentAction TextField(string monkeyId);
-         IMonkeyTalkComponentAction Checkbox(string monkeyId);
+        IChimpAction Button(string monkeyId);
+        IChimpArgs Slider(string monkeyId);
+        IChimpArgs TextField(string monkeyId);
+        IChimpArgs Checkbox(string monkeyId);
 ///..
 ///
 
     }
-
-    public interface IMonkeyTalkComponentAction
+    public interface IChimpArgs
     {
-         IMonkeyTalkComponentAction With(string args);
-         IMonkeyTalkComponentAction With(string args, Dictionary<string, string> modifiers );
-         MonkeyTalkWireReturn Tap();
-         MonkeyTalkWireReturn TouchUp();
-         MonkeyTalkWireReturn TouchDown();
-         MonkeyTalkWireReturn SwipeLeft();
-         MonkeyTalkWireReturn SwipeRight();
+         IChimpAction With(string args);
+         IChimpAction With(string args, Dictionary<string, string> modifiers );
     }
+    public interface IChimpAction
+    {
+        ChimpReturnMessage Play(string action);
+        ChimpReturnMessage Play(ChimpAction action);
 
-
+         ChimpReturnMessage Tap();
+         ChimpReturnMessage TouchUp();
+         ChimpReturnMessage TouchDown();
+         ChimpReturnMessage SwipeLeft();
+         ChimpReturnMessage SwipeRight();
+    }
 }

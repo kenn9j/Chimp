@@ -35,7 +35,7 @@ namespace Chimp.Core
         public MonkeyTalkCommand mtcommand;
         public MonkeyTalkComponent componentType;
         public string monkeyId;
-        public MonkeyTalkAction action;
+        public ChimpAction action;
         public string[] args;
         public Dictionary<string,string> modifiers;
     }
@@ -51,7 +51,7 @@ message	(optional) usually blank on OK (except for the Get action), otherwise co
 }
      * */
     [JsonObject]
-    public class MonkeyTalkWireReturn
+    public class ChimpReturnMessage
     {
         public string result;
         public string message;
@@ -74,7 +74,7 @@ message	(optional) usually blank on OK (except for the Get action), otherwise co
         Button
     }
     
-    public enum MonkeyTalkAction
+    public enum ChimpAction
     { 
         Tap, 
         TouchUp
